@@ -56,14 +56,17 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 900,
+    height: 800,
     webPreferences:
       process.env.NODE_ENV === 'development' || process.env.E2E_BUILD === 'true'
         ? {
-            nodeIntegration: true
+            nodeIntegration: true,
+            webviewTag: true
           }
         : {
+            nodeIntegration: true,
+            webviewTag: true,
             preload: path.join(__dirname, 'dist/renderer.prod.js')
           }
   });

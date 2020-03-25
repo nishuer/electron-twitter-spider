@@ -50,10 +50,10 @@ export default class MenuBuilder {
 
   buildDarwinTemplate() {
     const subMenuAbout: MenuItemConstructorOptions = {
-      label: 'Electron',
+      label: 'Qudiandian Toolkit',
       submenu: [
         {
-          label: 'About ElectronReact',
+          label: 'About Qudiandian Toolkit',
           // @ts-ignore
           selector: 'orderFrontStandardAboutPanel:'
         },
@@ -61,7 +61,7 @@ export default class MenuBuilder {
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide Qudiandian Toolkit',
           accelerator: 'Command+H',
           selector: 'hide:'
         },
@@ -132,6 +132,13 @@ export default class MenuBuilder {
           accelerator: 'Ctrl+Command+F',
           click: () => {
             this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+          }
+        },
+        {
+          label: 'Toggle &Developer Tools',
+          accelerator: 'Alt+Ctrl+I',
+          click: () => {
+            this.mainWindow.webContents.toggleDevTools();
           }
         }
       ]

@@ -1,6 +1,6 @@
 {
   "name": "electron-react-boilerplate",
-  "productName": "ElectronReact",
+  "productName": "Qudiandian Toolkit",
   "version": "1.0.0",
   "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
   "scripts": {
@@ -52,12 +52,13 @@
     ]
   },
   "build": {
-    "productName": "ElectronReact",
+    "productName": "Qudiandian Toolkit",
     "appId": "org.develar.ElectronReact",
     "files": [
       "dist/",
       "node_modules/",
       "app.html",
+      "preload.js",
       "main.prod.js",
       "main.prod.js.map",
       "package.json"
@@ -106,8 +107,8 @@
     "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
   },
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
+    "name": "nishu",
+    "email": "nishu@foxmail.com",
     "url": "https://electron-react-boilerplate.js.org"
   },
   "contributors": [
@@ -272,11 +273,14 @@
     "yarn": "^1.21.1"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.0.3",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@hot-loader/react-dom": "^16.12.0",
+    "antd": "^4.0.3",
     "connected-react-router": "^6.6.1",
     "core-js": "^3.6.4",
     "devtron": "^1.4.0",
+    "docx": "^5.0.2",
     "electron-debug": "^3.0.1",
     "electron-log": "^4.0.6",
     "electron-updater": "^4.2.0",
@@ -305,7 +309,12 @@
   "prettier": {
     "overrides": [
       {
-        "files": [".prettierrc", ".babelrc", ".eslintrc", ".stylelintrc"],
+        "files": [
+          ".prettierrc",
+          ".babelrc",
+          ".eslintrc",
+          ".stylelintrc"
+        ],
         "options": {
           "parser": "json"
         }
@@ -314,10 +323,15 @@
     "singleQuote": true
   },
   "stylelint": {
-    "extends": ["stylelint-config-standard", "stylelint-config-prettier"]
+    "extends": [
+      "stylelint-config-standard",
+      "stylelint-config-prettier"
+    ]
   },
   "renovate": {
-    "extends": ["bliss"]
+    "extends": [
+      "bliss"
+    ]
   },
   "husky": {
     "hooks": {
