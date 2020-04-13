@@ -10,13 +10,15 @@ const getElementByXpath = path => {
   ).singleNodeValue;
 };
 
-const getTimeStr = (time, time2) => {
+const getTimeStr = (time, time2, time3) => {
   let node = null;
 
   if (time.textContent.includes('年')) {
     node = time;
   } else if (time2.textContent.includes('年')) {
     node = time2;
+  } else if (time3.textContent.includes('年')) {
+    node = time3;
   } else {
     return '';
   }
@@ -42,13 +44,17 @@ const waitForExternal = setInterval(() => {
     '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/article/div/div/div[3]/div[2]'
   );
 
-  if (name && content && (time || time2)) {
+  const time3 = getElementByXpath(
+    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/div/div/article/div/div[3]/div[2]/div/div'
+  );
+
+  if (name && content && (time || time2 || time3)) {
     clearInterval(waitForExternal);
 
     const data = {
       // eslint-disable-next-line no-restricted-globals
       url: location.href,
-      time: getTimeStr(time, time2),
+      time: getTimeStr(time, time2, time3),
       name: name.textContent,
       content: content.textContent
     };
