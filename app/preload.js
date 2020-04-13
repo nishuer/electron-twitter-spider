@@ -27,22 +27,22 @@ const getTimeStr = (time, time2) => {
 
 const waitForExternal = setInterval(() => {
   const name = getElementByXpath(
-    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/article/div/div/div[2]/div[2]/div/div/div/div[1]/a/div'
+    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/div/div/article/div/div[2]/div[2]/div/div/div/div[1]/a/div'
   );
 
   const content = getElementByXpath(
-    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/article/div/div/div[3]/div[1]'
+    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/div/div/article/div/div[3]/div[1]/div'
   );
 
   const time = getElementByXpath(
-    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/article/div/div/div[3]/div[3]'
+    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/div/div/article/div/div[3]/div[3]/div/div'
   );
 
   const time2 = getElementByXpath(
     '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/article/div/div/div[3]/div[2]'
   );
 
-  if (name && content && time && time2) {
+  if (name && content && (time || time2)) {
     clearInterval(waitForExternal);
 
     const data = {
