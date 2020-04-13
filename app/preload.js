@@ -13,11 +13,11 @@ const getElementByXpath = path => {
 const getTimeStr = (time, time2, time3) => {
   let node = null;
 
-  if (time.textContent.includes('年')) {
+  if (time && time.textContent && time.textContent.includes('年')) {
     node = time;
-  } else if (time2.textContent.includes('年')) {
+  } else if (time2 && time2.textContent && time2.textContent.includes('年')) {
     node = time2;
-  } else if (time3.textContent.includes('年')) {
+  } else if (time3 && time3.textContent && time3.textContent.includes('年')) {
     node = time3;
   } else {
     return '';
