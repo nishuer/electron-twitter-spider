@@ -29,23 +29,23 @@ const getTimeStr = (time, time2, time3) => {
 
 const waitForExternal = setInterval(() => {
   const name = getElementByXpath(
-    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/div/div/article/div/div[2]/div[2]/div/div/div/div[1]/a/div'
+    '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/section/div/div/div[1]/div/div/div/article/div/div[2]/div[2]/div/div/div/div[1]/a/div'
   );
 
   const content = getElementByXpath(
-    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/div/div/article/div/div[3]/div[1]/div'
+    '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/section/div/div/div[1]/div/div/div/article/div/div[3]/div[1]/div'
   );
 
   const time = getElementByXpath(
-    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/div/div/article/div/div[3]/div[3]/div/div'
+    '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/section/div/div/div[1]/div/div/div/article/div/div[3]/div[3]/div/div'
   );
 
   const time2 = getElementByXpath(
-    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/article/div/div/div[3]/div[2]'
+    '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/section/div/div/div[1]/div/div/div/article/div/div[3]/div[2]/div/div'
   );
 
   const time3 = getElementByXpath(
-    '/html/body/div/div/div/div[2]/main/div/div/div/div/div/div/div/section/div/div/div/div[1]/div/div/div/article/div/div[3]/div[2]/div/div'
+    '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/section/div/div/div[1]/div/div/div/article/div/div[3]/div[3]/div/div'
   );
 
   if (name && content && (time || time2 || time3)) {
