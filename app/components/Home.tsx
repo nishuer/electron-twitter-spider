@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Row, Col, Alert, message } from 'antd';
+import { Button, Input, Row, Col, Alert, message, Modal } from 'antd';
 import * as fs from 'fs';
 import { Document, Packer, Paragraph, Media } from 'docx';
-import { FileWordOutlined } from '@ant-design/icons';
+import { FileWordOutlined, SettingOutlined } from '@ant-design/icons';
 import styles from './Home.css';
 
 const { dialog, app } = require('electron').remote;
@@ -19,14 +19,31 @@ export default function Home() {
   const [running, setRunning] = useState(false);
   const [isFinish, setIsFinish] = useState(false);
   const [isCanStart, setIsCanStart] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [name, setName] = useState('');
+  const [content, setContent] = useState('');
+  const [time1, setTime1] = useState('');
+  const [time2, setTime2] = useState('');
+  const [time3, setTime3] = useState('');
+
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'development') return;
-
     const webview: any = document.querySelector('webview');
+    const xpathObj = JSON.parse((localStorage.getItem('xpath') as any)) || {};
+
+    setName(xpathObj.name)
+    setContent(xpathObj.content)
+    setTime1(xpathObj.time1)
+    setTime2(xpathObj.time2)
+    setTime3(xpathObj.time3)
 
     webview.addEventListener('dom-ready', () => {
-      webview.openDevTools();
+      if (process.env.NODE_ENV === 'development') {
+        webview.openDevTools();
+      }
+
+      webview.send('start', xpathObj)
     });
   }, []);
 
@@ -155,6 +172,21 @@ export default function Home() {
     });
   };
 
+  const handleSettingOk = () => {
+    const data = {
+      name,
+      content,
+      time1,
+      time2,
+      time3
+    }
+
+    localStorage.setItem('xpath', JSON.stringify(data))
+
+    setModalVisible(false)
+    message.success('保存成功');
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.panel}>
@@ -196,7 +228,7 @@ export default function Home() {
             </Button>
           </Col>
         </Row>
-        <Row gutter={16} style={{ marginTop: '30px' }}>
+        <Row gutter={16} style={{ marginTop: '20px' }}>
           <Col span={24}>
             <Button
               block
@@ -208,9 +240,35 @@ export default function Home() {
             >
               下载文档
             </Button>
+            <SettingOutlined style={{fontSize: '20px', marginTop: '10px', color: '#666'}} onClick={() => setModalVisible(true)} />
           </Col>
         </Row>
       </div>
+      <Modal
+        title="设置"
+        visible={modalVisible}
+        onOk={handleSettingOk}
+        onCancel={() => setModalVisible(false)}
+      >
+        <span>用户昵称：</span>
+        <TextArea value={name} onChange={(e) => setName(e.target.value)}/>
+        <br/>
+        <br/>
+        <span>详细内容：</span>
+        <TextArea value={content} onChange={(e) => setContent(e.target.value)}/>
+        <br/>
+        <br/>
+        <span>发布时间1：</span>
+        <TextArea value={time1} onChange={(e) => setTime1(e.target.value)}/>
+        <br/>
+        <br/>
+        <span>发布时间2：</span>
+        <TextArea value={time2} onChange={(e) => setTime2(e.target.value)}/>
+        <br/>
+        <br/>
+        <span>发布时间3：</span>
+        <TextArea value={time3} onChange={(e) => setTime3(e.target.value)}/>
+      </Modal>
       <webview
         className={styles.webview}
         src={webviewUrl}

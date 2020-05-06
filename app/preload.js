@@ -1,6 +1,17 @@
 const { ipcRenderer } = require('electron');
 
-const getElementByXpath = path => {
+let isStart = false;
+let xpathObj = {};
+
+ipcRenderer.on('start', (e, msg) => {
+  console.log(e);
+  console.log(msg);
+
+  isStart = true;
+  xpathObj = msg;
+});
+
+const getElementByXPath = path => {
   return document.evaluate(
     path,
     document,
@@ -28,25 +39,18 @@ const getTimeStr = (time, time2, time3) => {
 };
 
 const waitForExternal = setInterval(() => {
-  const name = getElementByXpath(
-    '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/section/div/div/div[1]/div/div/div/article/div/div[2]/div[2]/div/div/div/div[1]/a/div'
-  );
+  if (!isStart) return;
 
-  const content = getElementByXpath(
-    '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/section/div/div/div[1]/div/div/div/article/div/div[3]/div[1]/div'
-  );
+  const name = getElementByXPath(xpathObj.name);
 
-  const time = getElementByXpath(
-    '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/section/div/div/div[1]/div/div/div/article/div/div[3]/div[3]/div/div'
-  );
+  const content = getElementByXPath(xpathObj.content);
 
-  const time2 = getElementByXpath(
-    '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/section/div/div/div[1]/div/div/div/article/div/div[3]/div[2]/div/div'
-  );
+  const time = getElementByXPath(xpathObj.time1);
 
-  const time3 = getElementByXpath(
-    '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/section/div/div/div[1]/div/div/div/article/div/div[3]/div[3]/div/div'
-  );
+  const time2 = getElementByXPath(xpathObj.time2);
+
+  // e.g. https://twitter.com/soulgoo/status/1252434143419305989
+  const time3 = getElementByXPath(xpathObj.time3);
 
   if (name && content && (time || time2 || time3)) {
     clearInterval(waitForExternal);
