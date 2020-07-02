@@ -3,18 +3,16 @@ import { Button, Input, Row, Col, Alert, message, Modal } from 'antd';
 import * as fs from 'fs';
 import { Document, Packer, Paragraph, Media } from 'docx';
 import { FileWordOutlined, SettingOutlined } from '@ant-design/icons';
-import styles from './Home.css';
+import styles from './index.scss';
 
 const { dialog, app } = require('electron').remote;
 
 const { TextArea } = Input;
 
 let spiderData: any[] = [];
-let urlList: any[] = [];
 let indexFlag = 0;
 
-export default function Home(props) {
-  console.log(props);
+export default function Home() {
   const [webviewUrl, setWebviewUrl] = useState('');
   const [urls, setUrls] = useState('');
   const [running, setRunning] = useState(false);
@@ -28,23 +26,22 @@ export default function Home(props) {
   const [time2, setTime2] = useState('');
   const [time3, setTime3] = useState('');
 
-
   useEffect(() => {
     const webview: any = document.querySelector('webview');
-    const xpathObj = JSON.parse((localStorage.getItem('xpath') as any)) || {};
+    const xpathObj = JSON.parse(localStorage.getItem('xpath') as any) || {};
 
-    setName(xpathObj.name)
-    setContent(xpathObj.content)
-    setTime1(xpathObj.time1)
-    setTime2(xpathObj.time2)
-    setTime3(xpathObj.time3)
+    setName(xpathObj.name);
+    setContent(xpathObj.content);
+    setTime1(xpathObj.time1);
+    setTime2(xpathObj.time2);
+    setTime3(xpathObj.time3);
 
     webview.addEventListener('dom-ready', () => {
       if (process.env.NODE_ENV === 'development') {
         webview.openDevTools();
       }
 
-      webview.send('start', xpathObj)
+      webview.send('start', xpathObj);
     });
   }, []);
 
@@ -58,25 +55,18 @@ export default function Home(props) {
       if (!running) return;
       if (event.channel !== 'spider-done') return;
 
-      webview
-        .capturePage()
-        .then((image: any) => {
-          spiderData.push({
-            ...event.args[0],
-            img: image.toPNG()
-          });
+      spiderData = spiderData.concat(event.args[0]);
 
-          if (indexFlag >= urlList.length) {
-            console.log('Spider finished successfully!');
-            console.log(spiderData);
+      if (indexFlag >= 10) {
+        console.log('Spider finished successfully!');
+        console.log(spiderData);
 
-            message.success('已完成，请点击"下载文档"', 5);
-            reset();
-            setIsFinish(true);
-          } else {
-            requestVeiwUrl(urlList[indexFlag]);
-          }
-        });
+        message.success('已完成，请点击"下载文档"', 5);
+        reset();
+        setIsFinish(true);
+      } else {
+        requestVeiwUrl();
+      }
     };
 
     webview.addEventListener('ipc-message', ipcListener);
@@ -98,23 +88,27 @@ export default function Home(props) {
     setUrls(e.target.value);
   };
 
-  const requestVeiwUrl = (url: string) => {
+  const requestVeiwUrl = () => {
+    const pn = indexFlag * 10;
+    const url = `https://www.google.com/search?q=${urls}&tbs=sbd:1&tbm=nws&ei=BMvqXobYAoXZhwOQt4bgBw&start=${pn}&sa=N&ved=0ahUKEwiG6pnCoorqAhWF7GEKHZCbAXwQ8NMDCGk&biw=1440&bih=748&dpr=2`;
+    console.log(url);
     setWebviewUrl(url);
     indexFlag++;
   };
 
   const handleStart = async () => {
-    urlList = urls.split('\n');
+    setWebviewUrl('https://google.com/ncr');
 
-    setRunning(true);
-    setIsFinish(false);
-    spiderData = [];
+    setTimeout(() => {
+      setRunning(true);
+      setIsFinish(false);
+      spiderData = [];
 
-    requestVeiwUrl(urlList[indexFlag]);
+      requestVeiwUrl();
+    }, 2000);
   };
 
   const reset = () => {
-    urlList = [];
     indexFlag = 0;
     setRunning(false);
     setWebviewUrl('');
@@ -128,32 +122,45 @@ export default function Home(props) {
     const doc = new Document();
     const paragraphList: any = [];
     const labelMap: any = {
+      title: '标题',
       url: '内容网址',
-      time: '发布时间',
-      name: '发布用户',
-      content: '详细内容'
+      datetime: '发布时间',
+      author: '发布网站',
+      desc: '简介'
     };
 
+    const authorList: any[] = [];
+    const finalList: any[] = [];
+
     spiderData.forEach((item, index) => {
+      if (!authorList.includes(item.author)) {
+        authorList.push(item.author);
+        finalList[item.author] = [];
+      }
+
+      finalList[item.author].push(item);
+    });
+
+    Object.keys(finalList).forEach((key) => {
       paragraphList.push(
         new Paragraph({
-          text: `序号：${index + 1}`
+          text: `${key}`
         })
       );
-      Object.keys(labelMap).forEach(key => {
-        paragraphList.push(
-          new Paragraph({
-            text: `${labelMap[key]}：${item[key]}`
-          })
-        );
+      paragraphList.push(new Paragraph({}));
+
+      finalList[key].forEach((item, index) => {
+        Object.keys(labelMap).forEach(key => {
+          paragraphList.push(
+            new Paragraph({
+              text: `${labelMap[key]}：${item[key]}`
+            })
+          );
+        });
+        paragraphList.push(new Paragraph({}));
       });
-      paragraphList.push(
-        new Paragraph({
-          text: '内容截图：'
-        })
-      );
-      const image = Media.addImage(doc, item.img, 600, 780);
-      paragraphList.push(new Paragraph(image));
+
+      paragraphList.push(new Paragraph({}));
       paragraphList.push(new Paragraph({}));
     });
 
@@ -180,21 +187,20 @@ export default function Home(props) {
       time1,
       time2,
       time3
-    }
+    };
 
-    localStorage.setItem('xpath', JSON.stringify(data))
+    localStorage.setItem('xpath', JSON.stringify(data));
 
-    setModalVisible(false)
+    setModalVisible(false);
     message.success('保存成功');
-  }
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.panel}>
-        <TextArea
+        <Input
           disabled={running}
-          placeholder="请输入网址，每行一个"
-          rows={23}
+          placeholder="请输入舆情关键词"
           value={urls}
           onChange={handleChangeUrls}
         />
@@ -241,7 +247,10 @@ export default function Home(props) {
             >
               下载文档
             </Button>
-            <SettingOutlined style={{fontSize: '20px', marginTop: '10px', color: '#666'}} onClick={() => setModalVisible(true)} />
+            {/* <SettingOutlined
+              style={{ fontSize: '20px', marginTop: '10px', color: '#666' }}
+              onClick={() => setModalVisible(true)}
+            /> */}
           </Col>
         </Row>
       </div>
@@ -252,31 +261,31 @@ export default function Home(props) {
         onCancel={() => setModalVisible(false)}
       >
         <span>用户昵称：</span>
-        <TextArea value={name} onChange={(e) => setName(e.target.value)}/>
-        <br/>
-        <br/>
+        <TextArea value={name} onChange={e => setName(e.target.value)} />
+        <br />
+        <br />
         <span>详细内容：</span>
-        <TextArea value={content} onChange={(e) => setContent(e.target.value)}/>
-        <br/>
-        <br/>
+        <TextArea value={content} onChange={e => setContent(e.target.value)} />
+        <br />
+        <br />
         <span>发布时间1：</span>
-        <TextArea value={time1} onChange={(e) => setTime1(e.target.value)}/>
-        <br/>
-        <br/>
+        <TextArea value={time1} onChange={e => setTime1(e.target.value)} />
+        <br />
+        <br />
         <span>发布时间2：</span>
-        <TextArea value={time2} onChange={(e) => setTime2(e.target.value)}/>
-        <br/>
-        <br/>
+        <TextArea value={time2} onChange={e => setTime2(e.target.value)} />
+        <br />
+        <br />
         <span>发布时间3：</span>
-        <TextArea value={time3} onChange={(e) => setTime3(e.target.value)}/>
+        <TextArea value={time3} onChange={e => setTime3(e.target.value)} />
       </Modal>
       <webview
         className={styles.webview}
         src={webviewUrl}
         preload={
           process.env.NODE_ENV === 'development'
-            ? `file://${__dirname}/preload.js`
-            : `file://${app.getAppPath()}/preload.js`
+            ? `file://${__dirname}/googleSpiderPreload.js`
+            : `file://${app.getAppPath()}/googleSpiderPreload.js`
         }
       />
     </div>

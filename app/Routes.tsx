@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import routes from './constants/routes.json';
 import App from './containers/App';
 import HomePage from './containers/HomePage';
+import PublicSentimentReport from './containers/PublicSentimentReport';
 // import CounterPage from './containers/CounterPage';
 
 export default function Routes() {
@@ -10,7 +11,8 @@ export default function Routes() {
     <App>
       <Switch>
         {/* <Route path={routes.COUNTER} component={CounterPage} /> */}
-        <Route path={routes.HOME} component={HomePage} />
+        <Route exact path={routes.HOME} component={HomePage} />
+        <Route exact path={routes.PUBLIC_SENTIMENT_REPORT} component={PublicSentimentReport} />
       </Switch>
     </App>
   );
