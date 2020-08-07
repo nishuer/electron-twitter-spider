@@ -23,29 +23,29 @@ const waitForExternal = setInterval(() => {
     const $ = cheerio.load(document.documentElement.outerHTML);
     const list = [];
 
-    $('.g').each((key, ele) => {
+    $('.dbsr').each((key, ele) => {
       const title = $(ele)
-        .find('.l.lLrAF')
+        .find('.JheGif.nDgy9d')
         .text()
         .trim();
 
       const url = $(ele)
-        .find('.l.lLrAF')
+        .find('a')
         .attr('href')
         .trim();
 
       const author = $(ele)
-        .find('.xQ82C.e8fRJf')
+        .find('.XTjFC.WF4CUc')
         .text()
         .trim();
 
       const datetime = $(ele)
-        .find('.f.nsa.fwzPFf')
+        .find('.WG9SHc')
         .text()
         .trim();
 
       const desc = $(ele)
-        .find('.st')
+        .find('.Y3v8qd')
         .text()
         .trim();
 
@@ -57,6 +57,41 @@ const waitForExternal = setInterval(() => {
         desc
       });
     });
+
+    // $('.g').each((key, ele) => {
+    //   const title = $(ele)
+    //     .find('.l.lLrAF')
+    //     .text()
+    //     .trim();
+
+    //   const url = $(ele)
+    //     .find('.l.lLrAF')
+    //     .attr('href')
+    //     .trim();
+
+    //   const author = $(ele)
+    //     .find('.xQ82C.e8fRJf')
+    //     .text()
+    //     .trim();
+
+    //   const datetime = $(ele)
+    //     .find('.f.nsa.fwzPFf')
+    //     .text()
+    //     .trim();
+
+    //   const desc = $(ele)
+    //     .find('.st')
+    //     .text()
+    //     .trim();
+
+    //   list.push({
+    //     title,
+    //     url,
+    //     author,
+    //     datetime,
+    //     desc
+    //   });
+    // });
 
     // 这里延迟 5 秒，防止谷歌封锁 IP
     setTimeout(() => {

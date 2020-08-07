@@ -5,7 +5,7 @@ const fs = require('fs');
 
 function spider(params) {
   const pn = params * 10;
-  const keyword = '高考顶替';
+  const keyword = '上访';
 
   const bdurl = `https://www.baidu.com/s?ie=utf-8&cl=2&medium=1&rtt=4&bsst=1&rsv_dl=news_b_pn&tn=news&wd=${keyword}&tfflag=0&x_bfe_rqs=03E80&x_bfe_tjscore=0.513809&tngroupname=organic_news&newVideo=12&pn=${pn}`;
 
