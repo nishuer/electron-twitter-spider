@@ -4,15 +4,19 @@ import routes from './constants/routes.json';
 import App from './containers/App';
 import HomePage from './containers/HomePage';
 import PublicSentimentReport from './containers/PublicSentimentReport';
-// import CounterPage from './containers/CounterPage';
+import PoliticalRumor from './containers/PoliticalRumor';
 
 export default function Routes() {
   return (
     <App>
       <Switch>
-        {/* <Route path={routes.COUNTER} component={CounterPage} /> */}
         <Route exact path={routes.HOME} component={HomePage} />
-        <Route exact path={routes.PUBLIC_SENTIMENT_REPORT} component={PublicSentimentReport} />
+        <Route
+          exact
+          path={routes.PUBLIC_SENTIMENT_REPORT}
+          component={PublicSentimentReport}
+        />
+        <Route exact path={routes.POLITICAL_RUMOR} component={PoliticalRumor} />
       </Switch>
     </App>
   );

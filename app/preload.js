@@ -21,15 +21,13 @@ const getElementByXPath = path => {
   ).singleNodeValue;
 };
 
-const getTimeStr = (time, time2, time3) => {
+const getTimeStr = (time, time2) => {
   let node = null;
 
   if (time && time.textContent && time.textContent.includes('年')) {
     node = time;
   } else if (time2 && time2.textContent && time2.textContent.includes('年')) {
     node = time2;
-  } else if (time3 && time3.textContent && time3.textContent.includes('年')) {
-    node = time3;
   } else {
     return '';
   }
@@ -49,18 +47,28 @@ const waitForExternal = setInterval(() => {
 
   const time2 = getElementByXPath(xpathObj.time2);
 
-  // e.g. https://twitter.com/soulgoo/status/1252434143419305989
-  const time3 = getElementByXPath(xpathObj.time3);
+  const comment1 = getElementByXPath(xpathObj.comment1);
 
-  if (name && content && (time || time2 || time3)) {
+  const comment2 = getElementByXPath(xpathObj.comment2);
+
+  const like1 = getElementByXPath(xpathObj.like1);
+
+  const like2 = getElementByXPath(xpathObj.like2);
+
+  // e.g. https://twitter.com/soulgoo/status/1252434143419305989
+  // const time3 = getElementByXPath(xpathObj.time3);
+
+  if (name && content && (time || time2)) {
     clearInterval(waitForExternal);
 
     const data = {
       // eslint-disable-next-line no-restricted-globals
       url: location.href,
-      time: getTimeStr(time, time2, time3),
+      time: getTimeStr(time, time2),
       name: name.textContent,
-      content: content.textContent
+      content: content.textContent,
+      comment: comment1 ? comment1.textContent || comment2.textContent || 0 : 0,
+      like: like1 ? like1.textContent || like2.textContent || 0 : 0
     };
 
     // 这里延迟2秒，不然 webview 截图截不到内容
