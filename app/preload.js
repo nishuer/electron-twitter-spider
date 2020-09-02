@@ -9,6 +9,16 @@ ipcRenderer.on('start', (e, msg) => {
 
   isStart = true;
   xpathObj = msg;
+
+  const urlElement = document.createElement('input');
+  urlElement.style.width = '100%';
+  urlElement.style.height = '30px';
+  urlElement.style.position = 'absolute';
+  urlElement.style.zIndex = 999999;
+  urlElement.style.fontSize = '14px';
+  urlElement.value = window.location.href;
+  const first = document.body.firstChild;
+  document.body.insertBefore(urlElement, first);
 });
 
 const getElementByXPath = path => {

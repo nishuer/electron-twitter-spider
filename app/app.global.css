@@ -10,5 +10,9 @@
 }
 
 .ant-tabs-nav {
+  margin-bottom: 0 !important;
+}
+
+.ant-tabs-nav-wrap {
   margin-left: 20px;
 }
