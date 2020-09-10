@@ -14,7 +14,6 @@ let urlList: any[] = [];
 let indexFlag = 0;
 
 export default function Home(props) {
-  console.log(props);
   const [webviewUrl, setWebviewUrl] = useState('');
   const [urls, setUrls] = useState('');
   const [running, setRunning] = useState(false);
@@ -26,7 +25,10 @@ export default function Home(props) {
   const [content, setContent] = useState('');
   const [time1, setTime1] = useState('');
   const [time2, setTime2] = useState('');
-  const [time3, setTime3] = useState('');
+  const [comment1, setComment1] = useState('');
+  const [comment2, setComment2] = useState('');
+  const [like1, setLike1] = useState('');
+  const [like2, setLike2] = useState('');
 
 
   useEffect(() => {
@@ -37,7 +39,10 @@ export default function Home(props) {
     setContent(xpathObj.content)
     setTime1(xpathObj.time1)
     setTime2(xpathObj.time2)
-    setTime3(xpathObj.time3)
+    setComment1(xpathObj.comment1);
+    setComment2(xpathObj.comment2);
+    setLike1(xpathObj.like1);
+    setLike2(xpathObj.like2);
 
     webview.addEventListener('dom-ready', () => {
       if (process.env.NODE_ENV === 'development') {
@@ -131,6 +136,8 @@ export default function Home(props) {
       url: '内容网址',
       time: '发布时间',
       name: '发布用户',
+      comment: '评论及转发',
+      like: '喜欢人次',
       content: '详细内容'
     };
 
@@ -179,7 +186,10 @@ export default function Home(props) {
       content,
       time1,
       time2,
-      time3
+      comment1,
+      comment2,
+      like1,
+      like2
     }
 
     localStorage.setItem('xpath', JSON.stringify(data))
@@ -265,10 +275,28 @@ export default function Home(props) {
         <br/>
         <span>发布时间2：</span>
         <TextArea value={time2} onChange={(e) => setTime2(e.target.value)}/>
-        <br/>
-        <br/>
-        <span>发布时间3：</span>
-        <TextArea value={time3} onChange={(e) => setTime3(e.target.value)}/>
+        <br />
+        <br />
+        <span>转发及评论1：</span>
+        <TextArea
+          value={comment1}
+          onChange={e => setComment1(e.target.value)}
+        />
+        <br />
+        <br />
+        <span>转发及评论2：</span>
+        <TextArea
+          value={comment2}
+          onChange={e => setComment2(e.target.value)}
+        />
+        <br />
+        <br />
+        <span>喜欢1：</span>
+        <TextArea value={like1} onChange={e => setLike1(e.target.value)} />
+        <br />
+        <br />
+        <span>喜欢2：</span>
+        <TextArea value={like2} onChange={e => setLike2(e.target.value)} />
       </Modal>
       <webview
         className={styles.webview}

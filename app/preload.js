@@ -77,8 +77,8 @@ const waitForExternal = setInterval(() => {
       time: getTimeStr(time, time2),
       name: name.textContent,
       content: content.textContent,
-      comment: comment1 ? comment1.textContent || comment2.textContent || 0 : 0,
-      like: like1 ? like1.textContent || like2.textContent || 0 : 0
+      comment: comment1 ? ( comment1.textContent || 0 ) : ( comment2 ? comment2.textContent || 0 : 0 ),
+      like: like1 ? ( like1.textContent || 0 ) : ( like2 ? like2.textContent || 0 : 0 )
     };
 
     // 这里延迟2秒，不然 webview 截图截不到内容
