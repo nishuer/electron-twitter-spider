@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Input, Row, Col, Alert, message, Modal } from 'antd';
 import * as fs from 'fs';
-import { Document, Packer, Paragraph, Media } from 'docx';
+import { Document, Packer, Paragraph, Media, HeadingLevel, AlignmentType, TextRun } from 'docx';
 import { FileWordOutlined, SettingOutlined } from '@ant-design/icons';
 import styles from './index.scss';
 
@@ -131,67 +131,189 @@ export default function Home(props) {
 
     spiderData.forEach((item, index) => {
       const doc = new Document();
-      const paragraphList: any = [];
+      const paragraphList: any[] = [];
 
-      const time = item.time.split('·')
+      const time = item.time.split('·');
 
       paragraphList.push(
         new Paragraph({
-          text: `【突出谣言】推特网民“${item.name}”${time[1]}${time[0]}发布“${item.content}”的谣言，建议部局封堵。`
+          text: `【涉习突出谣言】`,
+          heading: HeadingLevel.TITLE,
+          alignment: AlignmentType.CENTER
         })
       );
 
       paragraphList.push(
         new Paragraph({
-          text: `1、基本情况：`
+          text: ''
         })
       );
 
       paragraphList.push(
         new Paragraph({
-          text: `推特网民“${item.name}”${item.time}发布“${item.content}”的谣言，建议部局封堵。`
+          heading: HeadingLevel.HEADING_1,
+          children: [
+            new TextRun({
+              text: `一、基本情况：`,
+              color: '000000',
+              bold: true
+            })
+          ]
         })
       );
 
       paragraphList.push(
         new Paragraph({
-          text: `2、主要炒作方向：`
+          children: [
+            new TextRun({
+              text: `推特网民“${item.name}”${time[1]}${time[0]}发布“${item.content}”的谣言，建议部局封堵。`,
+              color: '000000',
+              size: 26
+            })
+          ]
         })
       );
 
       paragraphList.push(
         new Paragraph({
-          text: `${item.content}`
+          text: ''
         })
       );
 
       paragraphList.push(
         new Paragraph({
-          text: `3、推文链接：`
+          heading: HeadingLevel.HEADING_1,
+          children: [
+            new TextRun({
+              text: `二、具体内容：`,
+              color: '000000',
+              bold: true
+            })
+          ]
         })
       );
 
       paragraphList.push(
         new Paragraph({
-          text: `${item.url}`
+          children: [
+            new TextRun({
+              text: `推特网民“${item.name}”${item.time}发布“${item.content}”的谣言，建议部局封堵。`,
+              color: '000000',
+              size: 26
+            })
+          ]
         })
       );
 
       paragraphList.push(
         new Paragraph({
-          text: `4、转发情况：`
+          text: ''
         })
       );
 
       paragraphList.push(
         new Paragraph({
-          text: `目前共有${item.comment}次转发及评论，${item.like}人次喜欢`
+          heading: HeadingLevel.HEADING_1,
+          children: [
+            new TextRun({
+              text: `三、主要炒作方向：`,
+              color: '000000',
+              bold: true
+            })
+          ]
         })
       );
 
       paragraphList.push(
         new Paragraph({
-          text: '5 、截图请见附件'
+          children: [
+            new TextRun({
+              text: `涉领导人与涉政`,
+              color: '000000',
+              size: 26
+            })
+          ]
+        })
+      );
+
+      paragraphList.push(
+        new Paragraph({
+          text: ''
+        })
+      );
+
+      paragraphList.push(
+        new Paragraph({
+          heading: HeadingLevel.HEADING_1,
+          children: [
+            new TextRun({
+              text: `四、原文链接：`,
+              color: '000000',
+              bold: true
+            })
+          ]
+        })
+      );
+
+      paragraphList.push(
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: `${item.url}`,
+              color: '000000',
+              size: 26
+            })
+          ]
+        })
+      );
+
+      paragraphList.push(
+        new Paragraph({
+          text: ''
+        })
+      );
+
+      paragraphList.push(
+        new Paragraph({
+          heading: HeadingLevel.HEADING_1,
+          children: [
+            new TextRun({
+              text: `五、传播情况及突出评论：`,
+              color: '000000',
+              bold: true
+            })
+          ]
+        })
+      );
+
+      paragraphList.push(
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: `目前共有${item.comment}次转发及评论，${item.like}人次喜欢`,
+              color: '000000',
+              size: 26
+            })
+          ]
+        })
+      );
+
+      paragraphList.push(
+        new Paragraph({
+          text: ''
+        })
+      );
+
+      paragraphList.push(
+        new Paragraph({
+          heading: HeadingLevel.HEADING_1,
+          children: [
+            new TextRun({
+              text: `六、截图请见附件`,
+              color: '000000',
+              bold: true
+            })
+          ]
         })
       );
 
