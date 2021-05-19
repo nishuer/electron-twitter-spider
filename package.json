@@ -59,6 +59,8 @@
       "node_modules/",
       "app.html",
       "preload.js",
+      "greatFirewallPreload.js",
+      "googleSpiderPreload.js",
       "main.prod.js",
       "main.prod.js.map",
       "package.json"

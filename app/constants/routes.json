@@ -1,5 +1,6 @@
 {
-  "HOME": "/",
-  "POLITICAL_RUMOR": "/political-rumor",
+  "POLITICAL_RUMOR": "/",
+  "GREAT_FIREWALL": "/great-firewall",
+  "TWITTER": "/twitter",
   "PUBLIC_SENTIMENT_REPORT": "/public-sentiment-report"
 }

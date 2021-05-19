@@ -3,7 +3,7 @@ import { Button, Input, Row, Col, Alert, message, Modal } from 'antd';
 import * as fs from 'fs';
 import { Document, Packer, Paragraph, Media } from 'docx';
 import { FileWordOutlined, SettingOutlined } from '@ant-design/icons';
-import styles from './Home.css';
+import styles from './index.scss';
 
 const { dialog, app } = require('electron').remote;
 

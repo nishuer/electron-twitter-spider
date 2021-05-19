@@ -5,6 +5,7 @@ import {
   Document,
   Packer,
   Paragraph,
+  Media,
   HeadingLevel,
   AlignmentType,
   TextRun
@@ -28,34 +29,21 @@ export default function Home(props) {
   const [isCanStart, setIsCanStart] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [name, setName] = useState('');
-  const [content, setContent] = useState('');
-  const [time1, setTime1] = useState('');
-  const [time2, setTime2] = useState('');
-  const [comment1, setComment1] = useState('');
-  const [comment2, setComment2] = useState('');
-  const [like1, setLike1] = useState('');
-  const [like2, setLike2] = useState('');
+  const [weiboAccounts, setWeiboAccounts] = useState('');
 
   useEffect(() => {
     const webview: any = document.querySelector('webview');
-    const xpathObj = JSON.parse(localStorage.getItem('xpath') as any) || {};
+    const weiboAccountsData =
+      JSON.parse(localStorage.getItem('weiboAccounts') as any) || {};
 
-    setName(xpathObj.name);
-    setContent(xpathObj.content);
-    setTime1(xpathObj.time1);
-    setTime2(xpathObj.time2);
-    setComment1(xpathObj.comment1);
-    setComment2(xpathObj.comment2);
-    setLike1(xpathObj.like1);
-    setLike2(xpathObj.like2);
+    setWeiboAccounts(weiboAccountsData);
 
     webview.addEventListener('dom-ready', () => {
       if (process.env.NODE_ENV === 'development') {
         webview.openDevTools();
       }
 
-      webview.send('start', xpathObj);
+      webview.send('start', weiboAccountsData);
     });
   }, []);
 
@@ -69,23 +57,25 @@ export default function Home(props) {
       if (!running) return;
       if (event.channel !== 'spider-done') return;
 
-      webview.capturePage().then((image: any) => {
-        spiderData.push({
-          ...event.args[0],
-          img: image.toPNG()
-        });
+      webview
+        .capturePage()
+        .then((image: any) => {
+          spiderData.push({
+            ...event.args[0],
+            img: image.toPNG()
+          });
 
-        if (indexFlag >= urlList.length) {
-          console.log('Spider finished successfully!');
-          console.log(spiderData);
+          if (indexFlag >= urlList.length) {
+            console.log('Spider finished successfully!');
+            console.log(spiderData);
 
-          message.success('已完成，请点击"下载文档"', 5);
-          reset();
-          setIsFinish(true);
-        } else {
-          requestVeiwUrl(urlList[indexFlag]);
-        }
-      });
+            message.success('已完成，请点击"下载文档"', 5);
+            reset();
+            setIsFinish(true);
+          } else {
+            requestVeiwUrl(urlList[indexFlag]);
+          }
+        })
     };
 
     webview.addEventListener('ipc-message', ipcListener);
@@ -346,12 +336,16 @@ export default function Home(props) {
           .showSaveDialog({ defaultPath: `${todayStr}-yaoyan` })
           .then((path: any) => {
             console.log(path);
-            fs.mkdirSync(path.filePath)
+            fs.mkdirSync(path.filePath);
             buffer.forEach((item, index) => {
-              path.filePath && fs.writeFileSync(`${path.filePath}/${index + 1}.docx`, item);
-              fs.writeFileSync(`${path.filePath}/${index + 1}.png`, spiderData[index].img)
-            })
-          })
+              path.filePath &&
+                fs.writeFileSync(`${path.filePath}/${index + 1}.docx`, item);
+              fs.writeFileSync(
+                `${path.filePath}/${index + 1}.png`,
+                spiderData[index].img
+              );
+            });
+          });
       })
       .catch(e => {
         console.log(e);
@@ -442,50 +436,21 @@ export default function Home(props) {
         onOk={handleSettingOk}
         onCancel={() => setModalVisible(false)}
       >
-        <span>用户昵称：</span>
-        <TextArea value={name} onChange={e => setName(e.target.value)} />
-        <br />
-        <br />
-        <span>详细内容：</span>
-        <TextArea value={content} onChange={e => setContent(e.target.value)} />
-        <br />
-        <br />
-        <span>发布时间1：</span>
-        <TextArea value={time1} onChange={e => setTime1(e.target.value)} />
-        <br />
-        <br />
-        <span>发布时间2：</span>
-        <TextArea value={time2} onChange={e => setTime2(e.target.value)} />
-        <br />
-        <br />
-        <span>转发及评论1：</span>
+        <span>采集账号：</span>
         <TextArea
-          value={comment1}
-          onChange={e => setComment1(e.target.value)}
+          rows={20}
+          placeholder="每行一个微博账号ID"
+          value={weiboAccounts}
+          onChange={e => setWeiboAccounts(e.target.value)}
         />
-        <br />
-        <br />
-        <span>转发及评论2：</span>
-        <TextArea
-          value={comment2}
-          onChange={e => setComment2(e.target.value)}
-        />
-        <br />
-        <br />
-        <span>喜欢1：</span>
-        <TextArea value={like1} onChange={e => setLike1(e.target.value)} />
-        <br />
-        <br />
-        <span>喜欢2：</span>
-        <TextArea value={like2} onChange={e => setLike2(e.target.value)} />
       </Modal>
       <webview
         className={styles.webview}
         src={webviewUrl}
         preload={
           process.env.NODE_ENV === 'development'
-            ? `file://${__dirname}/preload.js`
-            : `file://${app.getAppPath()}/preload.js`
+            ? `file://${__dirname}/greatFirewallPreload.js`
+            : `file://${app.getAppPath()}/greatFirewallPreload.js`
         }
       />
     </div>

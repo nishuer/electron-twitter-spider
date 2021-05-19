@@ -15,7 +15,7 @@ ipcRenderer.on('start', (e, msg) => {
 const waitForExternal = setInterval(() => {
   if (!isStart) return;
 
-  const foot = document.getElementById('foot');
+  const foot = document.getElementById('xjs');
 
   if (foot) {
     clearInterval(waitForExternal);
