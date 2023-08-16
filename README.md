@@ -1,5 +1,5 @@
 # electron-twitter-spider
-一款基于electron开发的推特、谷歌新闻采集软件。
+A twitter and Google crawl client use electron 一款基于electron开发的推特、谷歌新闻采集软件。
 
 - 支持批量采集
 - 采集中自动截图
